@@ -80,18 +80,18 @@ WHERE
     AND Ids. `value` = '41166989-975d-4d17-b9de-17f94cb3eec1' 
     
     
-CREATE VIEW patientview AS
-    SELECT
-        Ids. `value` AS syntheaid,
-        id,
-        name[1].family AS name
-    FROM
-        patient
-    CROSS JOIN UNNEST(identifier) AS Ids (type,
-        `system`,
-        `value`)
-WHERE
-    `system` = 'https://github.com/synthetichealth/synthea'
+-- CREATE VIEW patientview AS
+--     SELECT
+--         Ids. `value` AS syntheaid,
+--         id,
+--         name[1].family AS name
+--     FROM
+--         patient
+--     CROSS JOIN UNNEST(identifier) AS Ids (type,
+--         `system`,
+--         `value`)
+-- WHERE
+--     `system` = 'https://github.com/synthetichealth/synthea'
 
 SELECT
     *
@@ -145,3 +145,10 @@ CREATE CATALOG analytics WITH (
     'username'='postgres',
     'password'='mysecretpassword'
 );
+
+INSERT INTO analytics.analytics.patient SELECT * from PatientView;
+INSERT INTO analytics.analytics.height SELECT * from Height;
+
+SELECT p.lastName,p.firstName,h.height 
+FROM Height h,PatientView p 
+WHERE h.subject = CONCAT('urn:uuid:',p.id);
