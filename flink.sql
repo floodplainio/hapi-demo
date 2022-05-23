@@ -152,3 +152,9 @@ INSERT INTO analytics.analytics.height SELECT * from Height;
 SELECT p.lastName,p.firstName,h.height 
 FROM Height h,PatientView p 
 WHERE h.subject = CONCAT('urn:uuid:',p.id);
+
+select * from height h, patient p, where p.id = h.subject
+
+SELECT p.*, max(h.height) FROM patient p, height h 
+	WHERE concat('urn:uuid:', p.id) = h.subject 
+	GROUP BY p.id
